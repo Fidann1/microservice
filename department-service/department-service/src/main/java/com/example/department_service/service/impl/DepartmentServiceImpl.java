@@ -1,7 +1,9 @@
 package com.example.department_service.service.impl;
 
 import com.example.department_service.dto.DepartmentDto;
+import com.example.department_service.dto.ErrorResponse;
 import com.example.department_service.entity.DepartmentEntity;
+import com.example.department_service.exception.ResourceNotFoundException;
 import com.example.department_service.mapper.DepartmentMapper;
 import com.example.department_service.repository.DepartmentRepository;
 import com.example.department_service.service.inter.DepartmentService;
@@ -27,6 +29,14 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DepartmentDto getDepartmentByCode(String departmentCode) {
-        return DepartmentMapper.DEPARTMENT_MAPPER.mapToDto(departmentRepository.findByDepartmentCode(departmentCode));
+        try{
+            return DepartmentMapper.DEPARTMENT_MAPPER.mapToDto(departmentRepository.findByDepartmentCode(departmentCode));
+        }
+        catch(Exception exception){
+            ErrorResponse errorResponse= ErrorResponse.builder()
+                    .message("The department with these code is not found")
+                    .build();
+            throw new ResourceNotFoundException(errorResponse);
+        }
     }
 }

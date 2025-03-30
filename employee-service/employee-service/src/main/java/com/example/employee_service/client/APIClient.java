@@ -8,9 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name="DEPARTMENT-SERVICE")
+@FeignClient(name="DEPARTMENT-SERVICE",
+        configuration = CustomErrorDecoder.class
+)
 public interface APIClient {
-    @GetMapping("/api/department/{departmentCode}")
+    @GetMapping("/api/department/departmentCode/{departmentCode}")
      DepartmentDto getDepartment(@PathVariable String departmentCode);
 
 }

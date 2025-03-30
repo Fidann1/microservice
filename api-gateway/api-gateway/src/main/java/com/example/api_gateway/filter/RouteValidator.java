@@ -35,6 +35,9 @@ public class RouteValidator {
     public void validateRoute(ServerWebExchange exchange, String role) {
           ServerHttpRequest request = exchange.getRequest();
           List<String> endpoints=routes.get(role);
+        if (endpoints == null) {
+            throw new UnauthorizedException("Unauthorized: Role not found or has no access to any endpoints.");
+        }
           List<Boolean> isMatched=new ArrayList<>();
           for(String endpoint:endpoints){
               isMatched.add(pathMatcher.match(request.getURI().getPath(), endpoint));
@@ -45,8 +48,9 @@ public class RouteValidator {
           }
     }
 
-    public Predicate<org.springframework.http.server.ServerHttpRequest> isSecured=
-            request->openApiEndpoints.stream().noneMatch(uri->request.getURI().getPath().contains(uri));
+    public Predicate<ServerHttpRequest> isSecured=
+            request->openApiEndpoints.stream()
+                    .noneMatch(uri->request.getURI().getPath().contains(uri));
 
 
 

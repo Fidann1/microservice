@@ -18,6 +18,6 @@ public class AuthRequest {
    // @NotBlank(message= "Password can not be blank")
     private String password;
 
-    @Enumerated(EnumType.STRING)
+
     private RoleEnum role;
 }

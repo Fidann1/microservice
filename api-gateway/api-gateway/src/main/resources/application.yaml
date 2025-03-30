@@ -26,18 +26,14 @@ spring:
             - Path=/api/department/**
           filters:
             - AuthenticationFilter
-            -
+
         - id: MS-SECURITY
           uri: lb://MS-SECURITY
           predicates:
-            -Path=/api/auth/**
+            - Path=/api/auth/**
 
-
-
-
-
-
-
+  main:
+    web-application-type: reactive
 
 
 

@@ -23,6 +23,5 @@ public class EmployeeDto {
     @NotBlank(message="password should not be null")
     private String password;
 
-    @Enumerated(EnumType.STRING)
     private RoleEnum role;
 }

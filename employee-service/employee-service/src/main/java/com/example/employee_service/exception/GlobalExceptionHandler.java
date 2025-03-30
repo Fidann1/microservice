@@ -4,6 +4,7 @@ import com.example.employee_service.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -25,4 +26,11 @@ public class GlobalExceptionHandler {
                 .errors(errors)
                 .build();
     }
+
+    @ExceptionHandler(CustomFeignException.class)
+    @ResponseStatus()
+    public ResponseEntity<ErrorResponse> handleCustomFeignException(CustomFeignException ex){
+        return ResponseEntity
+                .status(503)
+                .body(ex.getErrorResponse());}
 }

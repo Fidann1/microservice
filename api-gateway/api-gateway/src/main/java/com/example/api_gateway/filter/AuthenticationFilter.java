@@ -2,11 +2,9 @@ package com.example.api_gateway.filter;
 
 import com.example.api_gateway.exception.UnauthorizedException;
 import com.example.api_gateway.util.JwtUtil;
-import com.netflix.spectator.impl.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
@@ -30,7 +28,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
             String role=null;
             ServerWebExchange modifiedExchange = null;
 
-            if(routeValidator.isSecured.test((ServerHttpRequest) exchange.getRequest())){
+            if(routeValidator.isSecured.test( exchange.getRequest())){
                 String authHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
                 if(authHeader != null && authHeader.startsWith("Bearer ")){
                    token=authHeader.substring(7);
