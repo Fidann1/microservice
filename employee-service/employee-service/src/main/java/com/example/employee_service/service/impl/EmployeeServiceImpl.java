@@ -9,6 +9,7 @@ import com.example.employee_service.entity.EmployeeEntity;
 import com.example.employee_service.mapper.EmployeeMapper;
 import com.example.employee_service.repository.EmployeeRepository;
 import com.example.employee_service.service.inter.EmployeeService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     }
 
+    @CircuitBreaker(name="${spring.application.name}",fallbackMethod = "getDefaultDepartment")
     @Override
     public ApiDto getEmployeeById(Long id) {
         EmployeeEntity employeeEntity = employeeRepository.findById(id).get();
@@ -50,4 +52,17 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .build();
         return api ;
     }
+
+    public ApiDto getDefaultDepartment(Long id,Exception exception){EmployeeEntity employeeEntity = employeeRepository.findById(id).get();
+        DepartmentDto departmentDto =DepartmentDto.builder()
+                .departmentName("R&D Department")
+                .departmentCode("RD001")
+                .departmentDescription("Research and Development Department")
+                .build();
+
+        ApiDto api=ApiDto.builder()
+                .departmentDto(departmentDto)
+                .employeeDto(EmployeeMapper.EMPLOYEE_MAPPER.mapToEmployeeDto(employeeEntity))
+                .build();
+        return api ;}
 }
