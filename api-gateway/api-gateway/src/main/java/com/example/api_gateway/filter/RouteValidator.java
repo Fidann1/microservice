@@ -34,16 +34,21 @@ public class RouteValidator {
 
     public void validateRoute(ServerWebExchange exchange, String role) {
           ServerHttpRequest request = exchange.getRequest();
+        System.out.println(request.getURI().getPath());
           List<String> endpoints=routes.get(role);
         if (endpoints == null) {
             throw new UnauthorizedException("Unauthorized: Role not found or has no access to any endpoints.");
         }
           List<Boolean> isMatched=new ArrayList<>();
-          for(String endpoint:endpoints){
-              isMatched.add(pathMatcher.match(request.getURI().getPath(), endpoint));
-          }
+        for (String endpoint : endpoints) {
+            boolean match = pathMatcher.match(endpoint, request.getURI().getPath());
+            System.out.println("Comparing: " + request.getURI().getPath() + " with " + endpoint);
+            System.out.println("Match result: " + match);
+            isMatched.add(match);
+        }
 
-          if(!isMatched.contains(true)){
+
+        if(!isMatched.contains(true)){
               throw new UnauthorizedException("Unauthorized");
           }
     }
